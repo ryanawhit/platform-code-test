@@ -1,3 +1,4 @@
+
 def update_quality(awards):
     updater = QualityUpdater()
     for award in awards:
@@ -16,37 +17,31 @@ class QualityUpdater:
         if award.quality > 0:
             award.quality -= 2
         award.expires_in -= 1
-        if award.expires_in < 0:
-            if award.quality > 0:
-                award.quality -= 2
+        if award.expires_in < 0 and award.quality > 0:
+            award.quality -= 2
         if award.quality < 0:
             award.quality = 0
 
     def update_blue_first(self, award):
         if award.quality < 50:
-            award.quality += 1           
+            award.quality += 1
         award.expires_in -= 1
-        if award.expires_in < 0:
-            if award.quality < 50:
-                award.quality += 1
+        if award.expires_in < 0 and award.quality < 50:
+            award.quality += 1
 
     def update_blue_compare(self, award):
         if award.quality < 50:
             award.quality += 1
-        if award.expires_in < 11:
-            if award.quality < 50:
-                award.quality += 1
-        if award.expires_in < 6:
-            if award.quality < 50:
-                award.quality += 1               
+            if award.expires_in < 11:
+                award.quality = award.quality+2 if award.expires_in < 6 else award.quality+1
         award.expires_in -= 1
         if award.expires_in < 0:
-            award.quality = award.quality - award.quality
+            award.quality = 0
 
     def update_normal(self, award):
+        award.expires_in -= 1
         if award.quality > 0:
-            award.quality -= 1
-        award.expires_in -= 1      
-        if award.expires_in < 0:
-            if award.quality > 0:
+            if award.expires_in < 0:
+                award.quality -= 2
+            else:
                 award.quality -= 1
